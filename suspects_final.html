@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Suspects</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@600;700&family=Inter:wght@300;400;500&family=Share+Tech+Mono&display=swap');
+
+*{box-sizing:border-box;margin:0;padding:0}
+
+body{
+  background:#080C10;
+  width:100vw;
+  height:100vh;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  overflow:hidden;
+  font-family:'Inter',sans-serif;
+}
+
+/* HEADER */
+.header{
+  text-align:center;
+  margin-bottom:20px;
+}
+.tag{
+  font-family:'Share Tech Mono','Courier New',monospace;
+  font-size:10px;
+  color:#C0392B;
+  letter-spacing:0.18em;
+  margin-bottom:8px;
+}
+.title{
+  font-family:'Rajdhani','Arial Black',Impact,sans-serif;
+  font-size:36px;
+  font-weight:700;
+  color:#EEF4F7;
+  letter-spacing:0.04em;
+  text-transform:uppercase;
+  line-height:1;
+  margin-bottom:6px;
+}
+.subtitle{
+  font-size:12px;
+  color:#6B8099;
+  font-style:italic;
+  letter-spacing:0.03em;
+}
+
+/* GRID */
+.grid{
+  display:grid;
+  grid-template-columns:repeat(4,210px);
+  gap:14px;
+}
+
+/* CARD */
+.card{
+  width:210px;
+  background:#0D1117;
+  border:1px solid #1E2D3D;
+  border-radius:8px;
+  overflow:hidden;
+  cursor:pointer;
+  transition:transform 0.25s,border-color 0.25s,box-shadow 0.25s;
+  position:relative;
+}
+.card::after{
+  content:'';
+  position:absolute;
+  top:0;left:0;right:0;
+  height:3px;
+  transition:background 0.25s;
+}
+.card.high::after{background:#C0392B}
+.card.medium::after{background:#D4870A}
+
+.card:hover{transform:translateY(-4px)}
+.card.high:hover{border-color:#C0392B;box-shadow:0 12px 32px rgba(192,57,43,0.22)}
+.card.medium:hover{border-color:#D4870A;box-shadow:0 12px 32px rgba(212,135,10,0.18)}
+
+.card:hover .photo img{
+  filter:grayscale(0%) contrast(1.05);
+  transform:scale(1.05);
+}
+
+/* PHOTO */
+.photo{
+  width:210px;
+  height:220px;
+  overflow:hidden;
+  background:#0A1420;
+  position:relative;
+}
+.photo img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  object-position:center 15%;
+  filter:grayscale(15%) contrast(1.05);
+  transition:filter 0.35s,transform 0.35s;
+  display:block;
+}
+.photo-overlay{
+  position:absolute;
+  bottom:0;left:0;right:0;
+  height:60px;
+  background:linear-gradient(transparent,#0D1117);
+  pointer-events:none;
+}
+
+/* INFO */
+.info{padding:10px 13px 13px}
+
+.sid{
+  font-family:'Share Tech Mono','Courier New',monospace;
+  font-size:8px;
+  color:#3D5166;
+  letter-spacing:0.12em;
+  margin-bottom:4px;
+}
+.name{
+  font-family:'Rajdhani','Arial Black',sans-serif;
+  font-size:18px;
+  font-weight:700;
+  color:#EEF4F7;
+  line-height:1.1;
+  margin-bottom:2px;
+}
+.role{
+  font-size:10px;
+  color:#00B4D8;
+  margin-bottom:9px;
+  letter-spacing:0.01em;
+}
+.risk{
+  font-family:'Share Tech Mono','Courier New',monospace;
+  font-size:8px;
+  padding:3px 9px;
+  border-radius:2px;
+  display:inline-block;
+  margin-bottom:11px;
+  letter-spacing:0.06em;
+}
+.risk.high{
+  color:#ff6b6b;
+  background:rgba(192,57,43,0.1);
+  border:1px solid rgba(192,57,43,0.35);
+}
+.risk.medium{
+  color:#D4870A;
+  background:rgba(212,135,10,0.1);
+  border:1px solid rgba(212,135,10,0.35);
+}
+
+/* BUTTON */
+.btn{
+  width:100%;
+  background:transparent;
+  border:1px solid #2A3F55;
+  color:#6B8099;
+  font-family:'Share Tech Mono','Courier New',monospace;
+  font-size:9px;
+  padding:9px;
+  border-radius:3px;
+  cursor:pointer;
+  letter-spacing:0.12em;
+  transition:all 0.2s;
+  animation:pulse-btn 2.5s ease-in-out infinite;
+}
+@keyframes pulse-btn{
+  0%,100%{border-color:#2A3F55;color:#6B8099;box-shadow:none}
+  50%{border-color:#C0392B;color:#C0392B;box-shadow:0 0 10px rgba(192,57,43,0.25)}
+}
+.btn:hover,.btn.selected{
+  background:#C0392B;
+  border-color:#C0392B;
+  color:#fff;
+  animation:none;
+  box-shadow:0 4px 14px rgba(192,57,43,0.35);
+}
+.card.selected-card{
+  border-color:#C0392B !important;
+  box-shadow:0 0 0 1px #C0392B,0 12px 32px rgba(192,57,43,0.28) !important;
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="tag">// ACT 01 — THE SCENE // FOUR SUBJECTS IDENTIFIED</div>
+  <div class="title">Who do you investigate first?</div>
+  <div class="subtitle">Your choice determines what evidence you access next. Every minute counts.</div>
+</div>
+
+<div class="grid">
+
+  <!-- ELENA -->
+  <div class="card high" id="card-elena" onclick="select('elena')">
+    <div class="photo">
+      <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=420&h=440&fit=crop&crop=top&q=90" alt="Elena Vasquez">
+      <div class="photo-overlay"></div>
+    </div>
+    <div class="info">
+      <div class="sid">// SUBJECT 01</div>
+      <div class="name">Elena Vasquez</div>
+      <div class="role">Senior Data Analyst — 4 yrs</div>
+      <div class="risk high">⚠ HIGH RISK</div>
+      <button class="btn" id="btn-elena">INVESTIGATE →</button>
+    </div>
+  </div>
+
+  <!-- MARCUS -->
+  <div class="card high" id="card-marcus" onclick="select('marcus')">
+    <div class="photo">
+      <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=420&h=440&fit=crop&crop=top&q=90" alt="Marcus Webb">
+      <div class="photo-overlay"></div>
+    </div>
+    <div class="info">
+      <div class="sid">// SUBJECT 02</div>
+      <div class="name">Marcus Webb</div>
+      <div class="role">IT Systems Admin — 7 yrs</div>
+      <div class="risk high">⚠ HIGH RISK</div>
+      <button class="btn" id="btn-marcus">INVESTIGATE →</button>
+    </div>
+  </div>
+
+  <!-- PRIYA -->
+  <div class="card medium" id="card-priya" onclick="select('priya')">
+    <div class="photo">
+      <img src="https://images.unsplash.com/photo-1580489944761-15a19d654956?w=420&h=440&fit=crop&crop=top&q=90" alt="Priya Sharma">
+      <div class="photo-overlay"></div>
+    </div>
+    <div class="info">
+      <div class="sid">// SUBJECT 03</div>
+      <div class="name">Priya Sharma</div>
+      <div class="role">Compliance Officer — 6 yrs</div>
+      <div class="risk medium">~ MEDIUM RISK</div>
+      <button class="btn" id="btn-priya">INVESTIGATE →</button>
+    </div>
+  </div>
+
+  <!-- JAMES -->
+  <div class="card high" id="card-james" onclick="select('james')">
+    <div class="photo">
+      <img src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=420&h=440&fit=crop&crop=top&q=90" alt="James Okafor">
+      <div class="photo-overlay"></div>
+    </div>
+    <div class="info">
+      <div class="sid">// SUBJECT 04</div>
+      <div class="name">James Okafor</div>
+      <div class="role">Junior Developer — 3 months</div>
+      <div class="risk high">⚠ HIGH RISK</div>
+      <button class="btn" id="btn-james">INVESTIGATE →</button>
+    </div>
+  </div>
+
+</div>
+
+<script>
+function select(id){
+  ['elena','marcus','priya','james'].forEach(s=>{
+    document.getElementById('card-'+s).classList.remove('selected-card');
+    const b=document.getElementById('btn-'+s);
+    b.textContent='INVESTIGATE →';
+    b.classList.remove('selected');
+  });
+  document.getElementById('card-'+id).classList.add('selected-card');
+  const btn=document.getElementById('btn-'+id);
+  btn.textContent='SELECTED ✓';
+  btn.classList.add('selected');
+  if(window.parent&&window.parent!==window){
+    window.parent.postMessage('investigate_'+id,'*');
+  }
+}
+</script>
+</body>
+</html>
