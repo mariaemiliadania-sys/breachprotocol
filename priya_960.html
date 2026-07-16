@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Priya Sharma — Breach Protocol</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@600;700&family=Inter:wght@300;400;500;600&family=Share+Tech+Mono&display=swap');
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:960px;height:540px;overflow:hidden;background:#080C10;font-family:'Inter',sans-serif;color:#C8D6E5}
+.screen{width:960px;height:540px;display:none;flex-direction:column;align-items:center;justify-content:center;padding:24px 32px;position:relative}
+.screen.active{display:flex}
+.progress{position:absolute;top:16px;left:50%;transform:translateX(-50%);display:flex;gap:6px}
+.prog-dot{width:32px;height:3px;border-radius:2px;background:#1E2D3D;transition:background 0.3s}
+.prog-dot.done{background:#C0392B}.prog-dot.active{background:#EEF4F7}
+.subject-chip{position:absolute;top:16px;right:24px;font-family:'Share Tech Mono',monospace;font-size:9px;color:#3D5166;letter-spacing:0.1em;border:1px solid #1E2D3D;padding:3px 10px;border-radius:2px}
+#s1{background:radial-gradient(ellipse at 30% 50%,rgba(192,57,43,0.06) 0%,transparent 70%),#080C10}
+.s1-inner{max-width:780px;width:100%;display:flex;gap:28px;align-items:center}
+.s1-left{display:flex;flex-direction:column;align-items:center;flex-shrink:0}
+.s1-photo{width:100px;height:100px;border-radius:50%;overflow:hidden;border:2px solid #1E2D3D;margin-bottom:10px}
+.s1-photo img{width:100%;height:100%;object-fit:cover;object-position:center 10%;filter:grayscale(20%)}
+.s1-name{font-family:'Rajdhani',sans-serif;font-size:18px;font-weight:700;color:#EEF4F7;text-align:center;margin-bottom:2px}
+.s1-role{font-size:10px;color:#00B4D8;text-align:center}
+.s1-right{flex:1}
+.s1-time{font-family:'Share Tech Mono',monospace;font-size:9px;color:#C0392B;letter-spacing:0.15em;margin-bottom:10px}
+.s1-narrative{font-size:12px;color:#8BAFC0;line-height:1.7;background:#0D1117;border:1px solid #1E2D3D;border-left:3px solid #C0392B;border-radius:4px;padding:14px 16px;margin-bottom:10px}
+.s1-narrative strong{color:#EEF4F7}
+.s1-question{font-size:11px;color:#6B8099;font-style:italic;margin-bottom:14px}
+.s2-inner{max-width:780px;width:100%}
+.s2-label{font-family:'Share Tech Mono',monospace;font-size:9px;color:#C0392B;letter-spacing:0.15em;margin-bottom:8px}
+.s2-question{font-family:'Rajdhani',sans-serif;font-size:22px;font-weight:700;color:#EEF4F7;margin-bottom:4px;line-height:1.2}
+.s2-sub{font-size:11px;color:#6B8099;margin-bottom:16px;font-style:italic}
+.options{display:flex;flex-direction:column;gap:8px}
+.option{background:#0D1117;border:1px solid #1E2D3D;border-radius:5px;padding:12px 16px;cursor:pointer;transition:all 0.2s;display:flex;align-items:flex-start;gap:12px}
+.option:hover{border-color:#2A3F55;background:#131920;transform:translateX(3px)}
+.option-letter{font-family:'Share Tech Mono',monospace;font-size:10px;color:#C0392B;font-weight:700;min-width:18px;margin-top:1px}
+.option-text{font-size:12px;color:#8BAFC0;line-height:1.5}
+.option-text strong{color:#EEF4F7}
+.s3-inner{max-width:780px;width:100%}
+.consequence-header{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+.consequence-icon{font-size:24px;width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.consequence-icon.good{background:rgba(0,168,107,0.15);border:1px solid rgba(0,168,107,0.3)}
+.consequence-icon.bad{background:rgba(192,57,43,0.15);border:1px solid rgba(192,57,43,0.3)}
+.consequence-icon.ok{background:rgba(212,135,10,0.15);border:1px solid rgba(212,135,10,0.3)}
+.consequence-title{font-family:'Rajdhani',sans-serif;font-size:20px;font-weight:700}
+.consequence-title.good{color:#00C97A}.consequence-title.bad{color:#ff6b6b}.consequence-title.ok{color:#D4870A}
+.consequence-story{background:#0D1117;border:1px solid #1E2D3D;border-radius:5px;padding:14px 16px;margin-bottom:10px;font-size:12px;color:#8BAFC0;line-height:1.7}
+.consequence-story strong{color:#EEF4F7}
+.consequence-story.good{border-left:3px solid #00A86B}.consequence-story.bad{border-left:3px solid #C0392B}.consequence-story.ok{border-left:3px solid #D4870A}
+.impact-row{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:16px}
+.impact-item{background:#0D1117;border:1px solid #1E2D3D;border-radius:4px;padding:10px;text-align:center}
+.impact-label{font-family:'Share Tech Mono',monospace;font-size:7px;color:#3D5166;letter-spacing:0.1em;margin-bottom:4px}
+.impact-value{font-size:10px;color:#8BAFC0;line-height:1.4}
+.impact-value.red{color:#ff6b6b}.impact-value.green{color:#00C97A}.impact-value.amber{color:#D4870A}
+#s4{background:radial-gradient(ellipse at 70% 50%,rgba(0,168,107,0.05) 0%,transparent 70%),#080C10}
+.s4-inner{max-width:680px;width:100%;text-align:center}
+.s4-tag{font-family:'Share Tech Mono',monospace;font-size:9px;color:#00A86B;letter-spacing:0.15em;margin-bottom:12px}
+.s4-headline{font-family:'Rajdhani',sans-serif;font-size:28px;font-weight:700;color:#EEF4F7;line-height:1.2;margin-bottom:16px}
+.s4-body{font-size:13px;color:#8BAFC0;line-height:1.7;margin-bottom:16px;text-align:left;background:#0D1117;border:1px solid rgba(0,168,107,0.2);border-left:3px solid #00A86B;border-radius:4px;padding:14px 16px}
+.s4-body strong{color:#EEF4F7}
+.s4-takeaway{background:rgba(0,168,107,0.06);border:1px solid rgba(0,168,107,0.2);border-radius:5px;padding:14px 16px;margin-bottom:20px;font-size:13px;color:#00C97A;font-style:italic;line-height:1.6}
+.s4-next{font-family:'Share Tech Mono',monospace;font-size:8px;color:#3D5166;letter-spacing:0.1em;margin-bottom:12px}
+.btn-primary{background:#C0392B;color:#fff;font-family:'Share Tech Mono',monospace;font-size:9px;padding:10px 22px;border-radius:3px;cursor:pointer;letter-spacing:0.1em;border:none;transition:background 0.2s;display:inline-block}
+.btn-primary:hover{background:#a93226}
+.btn-secondary{background:transparent;color:#6B8099;font-family:'Share Tech Mono',monospace;font-size:9px;padding:10px 22px;border-radius:3px;cursor:pointer;letter-spacing:0.1em;border:1px solid #1E2D3D;transition:all 0.2s;display:inline-block}
+.btn-secondary:hover{border-color:#2A3F55;color:#EEF4F7}
+.btn-wrap{display:flex;justify-content:center;gap:10px;flex-wrap:wrap}
+</style>
+</head>
+<body>
+<div class="screen active" id="s1">
+  <div class="progress"><div class="prog-dot active"></div><div class="prog-dot"></div><div class="prog-dot"></div><div class="prog-dot"></div></div>
+  <div class="subject-chip">// SUBJECT 03 — PRIYA SHARMA</div>
+  <div class="s1-inner">
+    <div class="s1-left">
+      <div class="s1-photo"><img src="https://images.unsplash.com/photo-1580489944761-15a19d654956?w=200&h=200&fit=crop&crop=faces,top&q=90" alt="Priya"></div>
+      <div class="s1-name">Priya Sharma</div>
+      <div class="s1-role">Compliance Officer<br>6 years at Meridian</div>
+    </div>
+    <div class="s1-right">
+      <div class="s1-time">// SUNDAY NIGHT — 21:15</div>
+      <div class="s1-narrative">Priya is working late on a regulatory audit. A new regulation requires her to <strong>understand how client data is categorized</strong> — and her current access doesn't cover financial records.<br><br>So she approves her own access exception. She's done it before for audits. It's within her authority. She reviews the records, documents her findings, and <strong>logs out at 10:30pm</strong> — 17 minutes before the breach occurs.<br><br>Priya did nothing wrong that night. But her access exception <strong>set a precedent that nobody questioned.</strong></div>
+      <div class="s1-question">Who is responsible when a process works exactly as designed — but the design has a flaw?</div>
+      <div class="btn-wrap"><button class="btn-primary" onclick="goTo('s2')">WHAT HAPPENS NEXT →</button></div>
+    </div>
+  </div>
+</div>
+<div class="screen" id="s2">
+  <div class="progress"><div class="prog-dot done"></div><div class="prog-dot active"></div><div class="prog-dot"></div><div class="prog-dot"></div></div>
+  <div class="subject-chip">// SUBJECT 03 — PRIYA SHARMA</div>
+  <div class="s2-inner">
+    <div class="s2-label">// THE DILEMMA</div>
+    <div class="s2-question">You're reviewing the incident. Where does the responsibility lie?</div>
+    <div class="s2-sub">Priya followed the process correctly. But the process had a gap. Who owns the gap?</div>
+    <div class="options">
+      <div class="option" onclick="choose('A')"><div class="option-letter">A</div><div class="option-text"><strong>Priya should not have approved her own access exception.</strong> Even if it was within her authority, self-approval creates a conflict of interest. A second sign-off should always be required.</div></div>
+      <div class="option" onclick="choose('B')"><div class="option-letter">B</div><div class="option-text"><strong>The access exception policy was the problem.</strong> Any policy that allows employees to approve their own elevated access — regardless of role — is a structural vulnerability. The policy needs to be redesigned.</div></div>
+      <div class="option" onclick="choose('C')"><div class="option-letter">C</div><div class="option-text"><strong>Leadership is responsible.</strong> Nobody reviewed whether the access exception policy was still appropriate as regulations changed. Compliance frameworks need active oversight — not just reactive investigation.</div></div>
+    </div>
+  </div>
+</div>
+<div class="screen" id="s3">
+  <div class="progress"><div class="prog-dot done"></div><div class="prog-dot done"></div><div class="prog-dot active"></div><div class="prog-dot"></div></div>
+  <div class="subject-chip">// SUBJECT 03 — PRIYA SHARMA</div>
+  <div class="s3-inner" id="s3-content"></div>
+</div>
+<div class="screen" id="s4">
+  <div class="progress"><div class="prog-dot done"></div><div class="prog-dot done"></div><div class="prog-dot done"></div><div class="prog-dot active"></div></div>
+  <div class="subject-chip">// SUBJECT 03 — PRIYA SHARMA</div>
+  <div class="s4-inner">
+    <div class="s4-tag">// THE LESSON</div>
+    <div class="s4-headline">A process that works is not the same as a process that's right.</div>
+    <div class="s4-body">Priya followed every rule. The exception was approved, documented, and justified. And yet, the same mechanism that let her do her job legitimately could have been exploited by anyone with the same access.<br><br><strong>Security processes need to be reviewed — not just followed.</strong> A policy that made sense three years ago may create a vulnerability today.<br><br>The question to ask is not just <strong>"did we follow the process?"</strong> but <strong>"is our process still appropriate for the risks we face today?"</strong></div>
+    <div class="s4-takeaway">"The most dangerous policies are the ones everyone follows without questioning whether they still make sense."</div>
+    <div class="s4-next">// ALL THREE OPTIONS IDENTIFY REAL ACCOUNTABILITY GAPS</div>
+    <div class="btn-wrap"><button class="btn-primary" onclick="finish()">NEXT COLLEAGUE →</button><button class="btn-secondary" onclick="restart()">↺ REVIEW PRIYA</button></div>
+  </div>
+</div>
+<script>
+const consequences={
+  A:{icon:'✓',iconClass:'good',title:'Valid point.',titleClass:'good',story:`Self-approval is a known vulnerability. Even when someone has the authority to grant their own access, <strong>requiring a second sign-off creates a critical check.</strong><br><br>It's not about distrust. It's about creating a moment of pause — a second person who asks "does this make sense?" before elevated access is granted.`,storyClass:'good',impacts:[{label:'IMMEDIATE FIX',value:'Add mandatory second approval for any self-requested access exceptions.',cls:'green'},{label:'CULTURAL IMPACT',value:'Creates shared accountability. Removes pressure from individuals.',cls:'green'},{label:'RISK LEVEL',value:'Medium. Addresses symptom. Underlying policy still needs review.',cls:'amber'}]},
+  B:{icon:'🔧',iconClass:'ok',title:'The structural fix.',titleClass:'ok',story:`The root cause isn't Priya — it's the policy that allowed self-approval. <strong>Redesigning the access exception framework</strong> would prevent this gap from being exploited, regardless of who's in Priya's role.<br><br>A well-designed policy requires: documented justification, time-limited access, mandatory review, and approval from a disinterested party.`,storyClass:'ok',impacts:[{label:'LONG-TERM IMPACT',value:'Policy redesign prevents the gap from recurring.',cls:'green'},{label:'FOR EMPLOYEES',value:'Clear guidelines reduce ambiguity for everyone.',cls:'green'},{label:'EFFORT',value:'Requires cross-functional review. Higher effort, higher impact.',cls:'amber'}]},
+  C:{icon:'👥',iconClass:'good',title:'The hardest — and most important — answer.',titleClass:'good',story:`Priya's situation existed because <strong>no one in leadership had asked whether the access policy was still fit for purpose</strong> as regulations changed.<br><br>Security governance isn't just about responding to incidents. It's about <strong>proactively reviewing whether your policies still match the risks you face.</strong>`,storyClass:'good',impacts:[{label:'ACCOUNTABILITY',value:'Leadership owns the policy environment.',cls:'amber'},{label:'WHAT CHANGES',value:'Annual policy reviews. Named owners. Regular risk assessments.',cls:'green'},{label:'CULTURE SHIFT',value:'From reactive to proactive. From "who did this?" to "how did we let this happen?"',cls:'green'}]}
+};
+function goTo(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active')}
+function choose(option){const c=consequences[option];document.getElementById('s3-content').innerHTML=`<div class="consequence-header"><div class="consequence-icon ${c.iconClass}">${c.icon}</div><div class="consequence-title ${c.titleClass}">${c.title}</div></div><div class="consequence-story ${c.storyClass}">${c.story}</div><div class="impact-row">${c.impacts.map(i=>`<div class="impact-item"><div class="impact-label">${i.label}</div><div class="impact-value ${i.cls}">${i.value}</div></div>`).join('')}</div><div class="btn-wrap"><button class="btn-primary" onclick="goTo('s4')">THE LESSON →</button><button class="btn-secondary" onclick="goTo('s2')">← CHOOSE AGAIN</button></div>`;goTo('s3')}
+function finish(){if(window.parent&&window.parent!==window){window.parent.postMessage('priya_complete','*')}}
+function restart(){goTo('s1')}
+</script>
+</body>
+</html>
