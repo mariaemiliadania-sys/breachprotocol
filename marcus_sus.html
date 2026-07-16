@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Marcus Webb</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@600;700&family=Inter:wght@300;400;500&family=Share+Tech+Mono&display=swap');
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:960px;height:540px;overflow:hidden;background:#080C10;font-family:Inter,system-ui,sans-serif;color:#C8D6E5}
+
+/* SCREENS */
+.scr{width:960px;height:540px;display:none;flex-direction:column;align-items:center;justify-content:center;padding:24px 32px;position:relative}
+.scr.on{display:flex}
+#s1{background:radial-gradient(ellipse at 25% 50%,rgba(192,57,43,.07) 0%,transparent 65%),#080C10}
+#s4{background:radial-gradient(ellipse at 75% 50%,rgba(0,168,107,.06) 0%,transparent 65%),#080C10}
+
+/* PROGRESS */
+.dots{position:absolute;top:16px;left:50%;transform:translateX(-50%);display:flex;gap:6px}
+.dot{width:32px;height:3px;border-radius:2px;background:#1E2D3D}
+.dot.on{background:#EEF4F7}.dot.done{background:#C0392B}
+
+/* CHIP */
+.chip{position:absolute;top:16px;right:24px;font-family:'Share Tech Mono',monospace;font-size:9px;color:#3D5166;letter-spacing:.1em;border:1px solid #1E2D3D;padding:3px 10px;border-radius:2px}
+
+/* S1 */
+.s1-wrap{max-width:780px;width:100%;display:flex;gap:28px;align-items:center}
+.s1-l{display:flex;flex-direction:column;align-items:center;flex-shrink:0}
+.avatar{width:96px;height:96px;border-radius:50%;overflow:hidden;border:2px solid #1E2D3D;margin-bottom:10px}
+.avatar img{width:100%;height:100%;object-fit:cover;object-position:center 12%;filter:grayscale(15%)}
+.av-name{font-family:'Rajdhani',sans-serif;font-size:17px;font-weight:700;color:#EEF4F7;text-align:center;line-height:1.2;margin-bottom:2px}
+.av-role{font-size:10px;color:#00B4D8;text-align:center;line-height:1.4}
+.s1-r{flex:1}
+.s1-time{font-family:'Share Tech Mono',monospace;font-size:9px;color:#C0392B;letter-spacing:.15em;margin-bottom:10px}
+.s1-story{font-size:12px;color:#8BAFC0;line-height:1.75;background:#0D1117;border:1px solid #1E2D3D;border-left:3px solid #C0392B;border-radius:4px;padding:14px 16px;margin-bottom:10px}
+.s1-story strong{color:#EEF4F7}
+.s1-q{font-size:11px;color:#6B8099;font-style:italic;margin-bottom:16px}
+
+/* S2 */
+.s2-wrap{max-width:780px;width:100%}
+.s2-tag{font-family:'Share Tech Mono',monospace;font-size:9px;color:#C0392B;letter-spacing:.15em;margin-bottom:8px}
+.s2-q{font-family:'Rajdhani',sans-serif;font-size:22px;font-weight:700;color:#EEF4F7;margin-bottom:4px;line-height:1.2}
+.s2-s{font-size:11px;color:#6B8099;font-style:italic;margin-bottom:16px}
+
+/* OPTIONS */
+.opts{display:flex;flex-direction:column;gap:8px}
+.opt{background:#0D1117;border:1px solid #1E2D3D;border-radius:5px;padding:11px 15px;cursor:pointer;display:flex;align-items:flex-start;gap:12px;user-select:none}
+.opt.picked{border-color:#C0392B;border-left-width:3px;background:#140909}
+.opt-letter{font-family:'Share Tech Mono',monospace;font-size:10px;color:#C0392B;font-weight:700;min-width:16px;margin-top:1px;flex-shrink:0}
+.opt-body{font-size:12px;color:#8BAFC0;line-height:1.5}
+.opt-body strong{color:#EEF4F7}
+.opt.picked .opt-body{color:#C8D6E5}
+
+/* S3 */
+.s3-wrap{max-width:780px;width:100%}
+.c-head{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+.c-icon{font-size:22px;width:42px;height:42px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.c-icon.good{background:rgba(0,168,107,.15);border:1px solid rgba(0,168,107,.3)}
+.c-icon.bad{background:rgba(192,57,43,.15);border:1px solid rgba(192,57,43,.3)}
+.c-icon.ok{background:rgba(212,135,10,.15);border:1px solid rgba(212,135,10,.3)}
+.c-title{font-family:'Rajdhani',sans-serif;font-size:20px;font-weight:700}
+.c-title.good{color:#00C97A}.c-title.bad{color:#ff6b6b}.c-title.ok{color:#D4870A}
+.c-story{background:#0D1117;border:1px solid #1E2D3D;border-radius:5px;padding:13px 15px;margin-bottom:10px;font-size:12px;color:#8BAFC0;line-height:1.75}
+.c-story strong{color:#EEF4F7}
+.c-story.good{border-left:3px solid #00A86B}
+.c-story.bad{border-left:3px solid #C0392B}
+.c-story.ok{border-left:3px solid #D4870A}
+.impacts{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:16px}
+.imp{background:#0D1117;border:1px solid #1E2D3D;border-radius:4px;padding:9px;text-align:center}
+.imp-l{font-family:'Share Tech Mono',monospace;font-size:7px;color:#3D5166;letter-spacing:.1em;margin-bottom:3px}
+.imp-v{font-size:10px;color:#8BAFC0;line-height:1.4}
+.imp-v.r{color:#ff6b6b}.imp-v.g{color:#00C97A}.imp-v.a{color:#D4870A}
+
+/* S4 */
+.s4-wrap{max-width:680px;width:100%;text-align:center}
+.s4-tag{font-family:'Share Tech Mono',monospace;font-size:9px;color:#00A86B;letter-spacing:.15em;margin-bottom:12px}
+.s4-h{font-family:'Rajdhani',sans-serif;font-size:27px;font-weight:700;color:#EEF4F7;line-height:1.2;margin-bottom:14px}
+.s4-b{font-size:13px;color:#8BAFC0;line-height:1.75;margin-bottom:14px;text-align:left;background:#0D1117;border:1px solid rgba(0,168,107,.2);border-left:3px solid #00A86B;border-radius:4px;padding:13px 15px}
+.s4-b strong{color:#EEF4F7}
+.s4-qt{background:rgba(0,168,107,.06);border:1px solid rgba(0,168,107,.2);border-radius:5px;padding:13px 16px;margin-bottom:20px;font-size:13px;color:#00C97A;font-style:italic;line-height:1.6}
+.s4-n{font-family:'Share Tech Mono',monospace;font-size:8px;color:#3D5166;letter-spacing:.1em;margin-bottom:12px}
+
+/* BUTTONS */
+.btn-r{background:#C0392B;color:#fff;font-family:'Share Tech Mono',monospace;font-size:9px;padding:10px 22px;border-radius:3px;cursor:pointer;letter-spacing:.1em;border:none}
+.btn-g{background:transparent;color:#6B8099;font-family:'Share Tech Mono',monospace;font-size:9px;padding:10px 22px;border-radius:3px;cursor:pointer;letter-spacing:.1em;border:1px solid #1E2D3D}
+.row{display:flex;justify-content:center;gap:10px;flex-wrap:wrap}
+</style>
+</head>
+<body>
+
+<!-- S1 -->
+<div class="scr on" id="s1">
+  <div class="dots"><div class="dot on"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>
+  <div class="chip">// SUBJECT 02 — MARCUS WEBB</div>
+  <div class="s1-wrap">
+    <div class="s1-l">
+      <div class="avatar"><img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&h=200&fit=crop&crop=faces,top&q=90" alt="Marcus Webb"></div>
+      <div class="av-name">Marcus Webb</div>
+      <div class="av-role">IT Systems Admin<br>7 years at Meridian</div>
+    </div>
+    <div class="s1-r">
+      <div class="s1-time">// SUNDAY NIGHT — 22:34</div>
+      <div class="s1-story">Marcus is one of the most trusted people in the building. He has <strong>access to every system</strong> — that's his job. After 7 years, nobody questions what he does or when.<br><br>Sunday night, he sets up a <strong>scheduled maintenance script</strong> before leaving at 10:30pm. He's done it dozens of times. What Marcus doesn't know — or does he? — is that his <strong>unmonitored, unrestricted access</strong> becomes the entry point for everything that follows.</div>
+      <div class="s1-q">When did you last review who has unrestricted access in your organization?</div>
+      <div class="row"><button class="btn-r" onclick="go('s2')">WHAT HAPPENS NEXT &#8594;</button></div>
+    </div>
+  </div>
+</div>
+
+<!-- S2 -->
+<div class="scr" id="s2">
+  <div class="dots"><div class="dot done"></div><div class="dot on"></div><div class="dot"></div><div class="dot"></div></div>
+  <div class="chip">// SUBJECT 02 — MARCUS WEBB</div>
+  <div class="s2-wrap">
+    <div class="s2-tag">// THE DILEMMA</div>
+    <div class="s2-q">You manage IT policy. What do you change?</div>
+    <div class="s2-s">Marcus's situation was made possible by how your organization handles access. Which problem do you fix first?</div>
+    <div class="opts">
+      <div class="opt" data-l="A" onclick="pick(this)">
+        <div class="opt-letter">A</div>
+        <div class="opt-body"><strong>Require two-factor authentication for all remote access.</strong> Even with valid credentials, a second verification step would have blocked the remote session after Marcus left the building.</div>
+      </div>
+      <div class="opt" data-l="B" onclick="pick(this)">
+        <div class="opt-letter">B</div>
+        <div class="opt-body"><strong>Review and limit privileged access regularly.</strong> No one should have unrestricted access indefinitely. Even trusted employees should have access reviewed annually.</div>
+      </div>
+      <div class="opt" data-l="C" onclick="pick(this)">
+        <div class="opt-letter">C</div>
+        <div class="opt-body"><strong>Set up automated alerts for after-hours activity.</strong> Any system access outside normal working hours with admin credentials should trigger an automatic notification.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- S3 -->
+<div class="scr" id="s3">
+  <div class="dots"><div class="dot done"></div><div class="dot done"></div><div class="dot on"></div><div class="dot"></div></div>
+  <div class="chip">// SUBJECT 02 — MARCUS WEBB</div>
+  <div class="s3-wrap" id="s3c"></div>
+</div>
+
+<!-- S4 -->
+<div class="scr" id="s4">
+  <div class="dots"><div class="dot done"></div><div class="dot done"></div><div class="dot done"></div><div class="dot on"></div></div>
+  <div class="chip">// SUBJECT 02 — MARCUS WEBB</div>
+  <div class="s4-wrap">
+    <div class="s4-tag">// THE LESSON</div>
+    <div class="s4-h">Trust is not a security strategy.</div>
+    <div class="s4-b">Marcus had 7 years of trust. And that trust — without controls — became a vulnerability.<br><br><strong>In security, the question is never "do we trust this person?"</strong> The question is: "What happens if this person's account is compromised? What if they make a mistake? What if they leave?"<br><br>The goal is not to distrust people. The goal is to build systems where <strong>even trusted people can't cause catastrophic damage</strong> — accidentally or otherwise.</div>
+    <div class="s4-qt">"The most dangerous access is the access nobody questions — because it's always been there."</div>
+    <div class="s4-n">// ALL THREE OPTIONS ADDRESS REAL VULNERABILITIES</div>
+    <div class="row">
+      <button class="btn-r" onclick="done()">NEXT COLLEAGUE &#8594;</button>
+      <button class="btn-g" onclick="restart()">&#8592; REVIEW MARCUS</button>
+    </div>
+  </div>
+</div>
+
+<script>
+var C = {'A':{icon:'&#128272;',ic:'good',title:'Strong first step.',story:'With two-factor authentication, the remote session at 22:38 — <strong>4 minutes after Marcus left the building</strong> — would have required a second verification his phone never received. Session blocked. <strong>One control. One extra step. 40,000 records protected.</strong>',impacts:[{l:'BREACH PREVENTED',v:'Remote access blocked at authentication.',c:'g'},{l:'COST',v:'2FA: low cost, high impact. Industry standard.',c:'g'},{l:'FOR MARCUS',v:'The control protected him too.',c:'g'}]},'B':{icon:'&#128203;',ic:'ok',title:'The right mindset.',story:'Regular access reviews would have caught that Marcus had accumulated <strong>more access than his role required</strong>. Scoping his access wouldn\'t make him less effective — it would mean that even if compromised, <strong>the damage would be contained.</strong>',impacts:[{l:'RISK REDUCTION',v:'Scoped access limits blast radius of any breach.',c:'g'},{l:'FOR MARCUS',v:'Access review protects employees as much as the company.',c:'a'},{l:'ONGOING',v:'One policy, continuous protection for everyone.',c:'g'}]},'C':{icon:'&#128276;',ic:'good',title:'Detection over prevention.',story:'An automated alert at 22:38 would have given your security team <strong>a 23-minute window to intervene</strong> before any data moved. Sometimes you can\'t prevent every attempt. But you can <strong>respond fast enough to limit the damage.</strong>',impacts:[{l:'DETECTION TIME',v:'Alert at 22:38. Data moved at 23:01. 23 minutes.',c:'a'},{l:'OUTCOME',v:'Potential to stop exfiltration before completion.',c:'g'},{l:'BENEFIT',v:'After-hours alerts normalize security vigilance.',c:'g'}]}};
+var busy = false;
+
+function go(id) {
+  document.querySelectorAll('.scr').forEach(function(s){s.classList.remove('on');});
+  document.getElementById(id).classList.add('on');
+}
+
+function pick(el) {
+  if (busy) return;
+  var letter = el.getAttribute('data-l');
+  document.querySelectorAll('.opt').forEach(function(o){o.classList.remove('picked');});
+  el.classList.add('picked');
+  busy = true;
+  setTimeout(function() {
+    var c = C[letter];
+    var imp = c.impacts.map(function(i){
+      return '<div class="imp"><div class="imp-l">'+i.l+'</div><div class="imp-v '+i.c+'">'+i.v+'</div></div>';
+    }).join('');
+    document.getElementById('s3c').innerHTML =
+      '<div class="c-head"><div class="c-icon '+c.ic+'">'+c.icon+'</div>'
+      +'<div class="c-title '+c.ic+'">'+c.title+'</div></div>'
+      +'<div class="c-story '+c.ic+'">'+c.story+'</div>'
+      +'<div class="impacts">'+imp+'</div>'
+      +'<div class="row">'
+      +'<button class="btn-r" onclick="go(\'s4\')">THE LESSON &#8594;</button>'
+      +'<button class="btn-g" onclick="goBack()">&#8592; CHOOSE AGAIN</button>'
+      +'</div>';
+    go('s3');
+    busy = false;
+  }, 500);
+}
+
+function goBack() {
+  busy = false;
+  go('s2');
+}
+
+function restart() {
+  busy = false;
+  document.querySelectorAll('.opt').forEach(function(o){o.classList.remove('picked');});
+  go('s1');
+}
+
+function done() {
+  if (window.parent && window.parent !== window) {
+    window.parent.postMessage('marcus_complete', '*');
+  }
+}
+</script>
+</body>
+</html>
